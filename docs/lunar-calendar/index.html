@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>万年历</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button id="prev-year">
+                << 年</button>
+                    <button id="prev-month">
+                        < 月</button>
+                            <h2 id="current-month-year"></h2>
+                            <button id="next-month">月 ></button>
+                            <button id="next-year">年 >></button>
+                            <button id="go-to-today">今天</button>
+        </div>
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th>一</th>
+                    <th>二</th>
+                    <th>三</th>
+                    <th>四</th>
+                    <th>五</th>
+                    <th class="weekend">六</th>
+                    <th class="weekend">日</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body">
+                <!-- 日期格子将由 JavaScript 生成 -->
+            </tbody>
+        </table>
+        <div class="date-info-panel" id="date-info-panel" style="display:none;">
+            <h3 id="info-solar"></h3>
+            <p id="info-lunar"></p>
+            <p id="info-ganzhi-year"></p>
+            <p id="info-ganzhi-month"></p>
+            <p id="info-ganzhi-day"></p>
+            <p id="info-animal"></p>
+            <p id="info-festivals"></p>
+            <p id="info-jieqi"></p>
+            <p id="info-yi"></p>
+            <p id="info-ji"></p>
+        </div>
+    </div>
+
+    <!-- 引入 lunar-javascript 库 -->
+    <!-- 方式一: 本地文件 -->
+    <!-- <script src="lib/lunar.min.js"></script> -->
+    <!-- 方式二: CDN (推荐，记得替换为最新版本) -->
+    <script src="lib/lunar.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

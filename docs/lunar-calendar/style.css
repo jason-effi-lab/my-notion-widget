@@ -1,0 +1,165 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    /* 修改这里，让日历顶部对齐 */
+    min-height: 100vh;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
+.calendar-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    min-width: 400px;
+    /* 根据内容调整 */
+    max-width: 600px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+    margin: 0 10px;
+    font-size: 1.4em;
+    min-width: 120px;
+    /* 给月份年份显示区一个最小宽度 */
+    text-align: center;
+}
+
+.calendar-header button {
+    padding: 8px 12px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    border-radius: 4px;
+}
+
+.calendar-header button:hover {
+    background-color: #ddd;
+}
+
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    /* 让列宽均匀 */
+}
+
+.calendar-table th,
+.calendar-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    /* 减小一点内边距 */
+    text-align: center;
+    vertical-align: top;
+    height: 70px;
+    /* 给单元格一个固定高度 */
+    font-size: 0.9em;
+}
+
+.calendar-table th {
+    background-color: #f9f9f9;
+}
+
+.date-cell {
+    cursor: pointer;
+}
+
+.date-cell:hover {
+    background-color: #e9f5ff;
+}
+
+.solar-day {
+    font-size: 1.1em;
+    font-weight: bold;
+    display: block;
+}
+
+.lunar-day {
+    font-size: 0.75em;
+    color: #555;
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    /* 防止节日文字过长 */
+    text-overflow: ellipsis;
+    /* 显示省略号 */
+    white-space: nowrap;
+    /* 不换行 */
+}
+
+.other-month-day .solar-day,
+.other-month-day .lunar-day {
+    color: #aaa;
+}
+
+.today .solar-day {
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 50%;
+    width: 2em;
+    /* 调整以适应字体 */
+    height: 2em;
+    /* 调整以适应字体 */
+    line-height: 2em;
+    /* 调整以适应字体 */
+    margin: 0 auto 2px;
+    /* 居中 */
+    display: inline-block;
+    /* 使其成为圆形背景 */
+}
+
+.today {
+    background-color: #fffbe6;
+    /* 稍微高亮今天的单元格 */
+}
+
+
+.weekend {
+    /* 周六周日表头和日期 */
+    color: #e60000;
+}
+
+.festival {
+    font-size: 0.7em;
+    color: #c0392b;
+    /* 节日红色 */
+    display: block;
+    margin-top: 2px;
+}
+
+.jieqi {
+    font-size: 0.7em;
+    color: #27ae60;
+    /* 节气绿色 */
+    display: block;
+    margin-top: 2px;
+}
+
+/* 信息面板 */
+.date-info-panel {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.date-info-panel h3 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+.date-info-panel p {
+    font-size: 0.9em;
+    margin: 5px 0;
+    color: #333;
+}

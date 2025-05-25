@@ -1,1 +1,1 @@
-# my-notion-clock-widget
+# my-notion-widget
