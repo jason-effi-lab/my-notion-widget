@@ -28,30 +28,30 @@ document.addEventListener('DOMContentLoaded', () => {
         currentMonthYearElement.textContent = `${year} 年 ${month} 月`;
         calendarBodyElement.innerHTML = ''; // 清空旧的日历格子
 
-        // 获取当月第一天和最后一天
-        const firstDayOfMonth = Solar.fromYmd(year, month, 1);
-        const lunarFirstDay = firstDayOfMonth.getLunar();
-
-        // lunar-javascript 的 Calendar.getDaysInMonth() 获取的是农历月的天数，我们需要公历月的数据。
-        // 我们需要自己计算公历月的日历网格，然后用 Solar.fromYmd(y,m,d).getLunar() 来获取每天的农历信息。
         const date = new Date(year, month - 1, 1);
-        const daysInMonth = new Date(year, month, 0).getDate(); // 获取当月天数
+        const daysInMonth = new Date(year, month, 0).getDate();
         const firstDayOfWeek = (date.getDay() === 0) ? 6 : date.getDay() - 1; // 0 (周日) 到 6 (周六) -> 0 (周一) 到 6 (周日)
 
-        let dayCounter = 1;
-        for (let i = 0; i < 6; i++) { // 最多6行
-            const row = document.createElement('tr');
-            let rowHasDates = false; // 标记这行是否有实际日期，避免最后全是空行
+        // **关键改动：动态计算行数**
+        const numRows = Math.ceil((firstDayOfWeek + daysInMonth) / 7);
 
-            for (let j = 0; j < 7; j++) { // 7天一周
+        let dayCounter = 1;
+        // **关键改动：使用 numRows**
+        for (let i = 0; i < numRows; i++) {
+            const row = document.createElement('tr');
+
+            for (let j = 0; j < 7; j++) {
                 const cell = document.createElement('td');
                 cell.classList.add('date-cell');
 
                 if (i === 0 && j < firstDayOfWeek) {
-                    // 填充上个月的日期 (可选，简化版可以不填充)
-                    const prevMonthDays = new Date(year, month - 1, 0).getDate();
-                    const prevDay = prevMonthDays - firstDayOfWeek + j + 1;
-                    const solarPrev = Solar.fromYmd(month === 1 ? year - 1 : year, month === 1 ? 12 : month - 1, prevDay);
+                    // 填充上个月的日期
+                    const prevMonthLastDay = new Date(year, month - 1, 0);
+                    const prevMonthYear = prevMonthLastDay.getFullYear();
+                    const prevActualMonth = prevMonthLastDay.getMonth() + 1;
+                    const prevDayNum = prevMonthLastDay.getDate() - firstDayOfWeek + j + 1;
+                    
+                    const solarPrev = Solar.fromYmd(prevMonthYear, prevActualMonth, prevDayNum);
                     const lunarPrev = solarPrev.getLunar();
 
                     cell.innerHTML = `
@@ -65,17 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     const lunarDayObj = solarDay.getLunar();
 
                     let lunarDisplay = lunarDayObj.getDayInChinese();
-                    if (lunarDayObj.getDay() === 1) { // 如果是农历初一，显示月份
+                    if (lunarDayObj.getDay() === 1) {
                         lunarDisplay = lunarDayObj.getMonthInChinese() + '月';
                     }
 
-                    // 节日和节气
                     let festivals = '';
-                    const solarFestivals = solarDay.getFestivals(); // 公历节日
+                    const solarFestivals = solarDay.getFestivals();
                     solarFestivals.forEach(f => festivals += `<span class="festival">${f}</span>`);
-                    const lunarFestivals = lunarDayObj.getFestivals(); // 农历节日
+                    const lunarFestivals = lunarDayObj.getFestivals();
                     lunarFestivals.forEach(f => festivals += `<span class="festival">${f}</span>`);
-                    const otherFestivals = lunarDayObj.getOtherFestivals(); // 其他特定日期名称
+                    const otherFestivals = lunarDayObj.getOtherFestivals();
                     otherFestivals.forEach(f => festivals += `<span class="festival">${f}</span>`);
 
 
@@ -84,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         jieqiDisplay = `<span class="jieqi">${lunarDayObj.getJieQi()}</span>`;
                     }
 
-
                     cell.innerHTML = `
                         <span class="solar-day">${dayCounter}</span>
                         <span class="lunar-day">${lunarDisplay}</span>
@@ -92,15 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${jieqiDisplay}
                     `;
 
-                    // 高亮今天
                     const today = new Date();
                     if (year === today.getFullYear() && month === (today.getMonth() + 1) && dayCounter === today.getDate()) {
                         cell.classList.add('today');
-                    }
-
-                    // 周末高亮 (可选，CSS也可以通过th来判断)
-                    if (j === 5 || j === 6) { // 周六或周日
-                        // cell.classList.add('weekend'); // 可以通过th样式来让整列变红
                     }
 
                     cell.dataset.year = year;
@@ -109,11 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     cell.addEventListener('click', showDateInfo);
 
                     dayCounter++;
-                    rowHasDates = true;
                 } else {
-                    // 填充下个月的日期 (可选)
+                    // 填充下个月的日期
                     const nextMonthDay = dayCounter - daysInMonth;
-                    const solarNext = Solar.fromYmd(month === 12 ? year + 1 : year, month === 12 ? 1 : month + 1, nextMonthDay);
+                    const nextMonthFirstDay = new Date(year, month, 1); // 下个月的第一天
+                    const nextActualMonth = nextMonthFirstDay.getMonth() +1;
+                    const nextMonthYear = nextMonthFirstDay.getFullYear();
+
+                    const solarNext = Solar.fromYmd(nextMonthYear, nextActualMonth, nextMonthDay);
                     const lunarNext = solarNext.getLunar();
                     cell.innerHTML = `
                         <span class="solar-day">${solarNext.getDay()}</span>
@@ -125,13 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.appendChild(cell);
             }
             calendarBodyElement.appendChild(row);
-            if (!rowHasDates && dayCounter > daysInMonth) break; // 如果一行没有任何本月日期，并且本月日期已排完，则停止
         }
     }
 
     function showDateInfo(event) {
         let targetCell = event.target;
-        // 确保我们获取到的是 td 元素
         while (targetCell && targetCell.tagName !== 'TD') {
             targetCell = targetCell.parentElement;
         }
@@ -163,16 +156,13 @@ document.addEventListener('DOMContentLoaded', () => {
         infoFestivals.textContent = `节日: ${festivalsText.trim() || '无'}`;
         infoJieqi.textContent = `节气: ${lunar.getJieQi() || '无'}`;
 
-        const dayLunar = Lunar.fromDate(new Date(year, month - 1, day)); // lunar-javascript 需要用这个获取宜忌
+        const dayLunar = Lunar.fromDate(new Date(year, month - 1, day));
         infoYi.textContent = `宜: ${dayLunar.getDayYi().join(' ')}`;
         infoJi.textContent = `忌: ${dayLunar.getDayJi().join(' ')}`;
-
 
         dateInfoPanel.style.display = 'block';
     }
 
-
-    // 事件监听
     prevMonthButton.addEventListener('click', () => {
         currentMonth--;
         if (currentMonth < 1) {
@@ -210,22 +200,18 @@ document.addEventListener('DOMContentLoaded', () => {
         currentYear = today.getFullYear();
         currentMonth = today.getMonth() + 1;
         renderCalendar(currentYear, currentMonth);
-        // 模拟点击今天的日期来显示信息
         const todayCell = document.querySelector(`.date-cell[data-year="${currentYear}"][data-month="${currentMonth}"][data-day="${today.getDate()}"]`);
         if (todayCell) {
-            todayCell.click();
+           todayCell.click();
         } else {
             dateInfoPanel.style.display = 'none';
         }
     });
 
-    // 初始渲染
     renderCalendar(currentYear, currentMonth);
-    // 初始加载时如果想显示今天的信息，可以模拟一次点击
     const todayForInfo = new Date();
     const todayCellInitial = document.querySelector(`.date-cell[data-year="${todayForInfo.getFullYear()}"][data-month="${todayForInfo.getMonth() + 1}"][data-day="${todayForInfo.getDate()}"]`);
     if (todayCellInitial) {
-        todayCellInitial.click();
+       todayCellInitial.click();
     }
-
 });

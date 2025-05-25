@@ -1,165 +1,176 @@
 body {
-    font-family: sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    /* 修改这里，让日历顶部对齐 */
-    min-height: 100vh;
-    margin: 20px;
-    background-color: #f4f4f4;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 10px; /* 组件外边距，给一点呼吸空间 */
+    background-color: #fff;
+    font-size: 13px; /* 调整基础字号，如果14px还是大，可以再减小 */
+    box-sizing: border-box;
+    /* overflow: hidden; */ /* 暂时去掉，先看内容自然高度 */
 }
 
 .calendar-container {
     background: #fff;
-    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    min-width: 400px;
-    /* 根据内容调整 */
-    max-width: 600px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px; /* 设定一个最大宽度，避免在宽屏 Notion 块中过宽，根据需要调整 */
+    margin: 0 auto;   /* 如果 calendar-container 比 body 窄，则使其居中 */
+    box-sizing: border-box;
 }
 
 .calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    padding: 10px 12px; /* 增加头部内边距 */
+    border-bottom: 1px solid #eaeaea;
 }
 
 .calendar-header h2 {
-    margin: 0 10px;
-    font-size: 1.4em;
-    min-width: 120px;
-    /* 给月份年份显示区一个最小宽度 */
-    text-align: center;
+    margin: 0 8px;
+    font-size: 1.15em; /* 头部月份年份字号略大 */
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .calendar-header button {
-    padding: 8px 12px;
+    padding: 5px 10px; /* 按钮内边距 */
+    font-size: 0.9em;
     cursor: pointer;
-    border: 1px solid #ccc;
-    background-color: #eee;
-    border-radius: 4px;
+    border: 1px solid #dcdcdc;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    line-height: 1.4;
 }
-
 .calendar-header button:hover {
-    background-color: #ddd;
+    background-color: #f0f0f0;
 }
 
 .calendar-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
-    /* 让列宽均匀 */
+    table-layout: fixed; /* 关键：保持列宽平均 */
 }
 
-.calendar-table th,
-.calendar-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    /* 减小一点内边距 */
+.calendar-table th, .calendar-table td {
+    border: 1px solid #f0f0f0;
     text-align: center;
-    vertical-align: top;
-    height: 70px;
-    /* 给单元格一个固定高度 */
-    font-size: 0.9em;
+    vertical-align: top; /* 内容从上往下排 */
+    box-sizing: border-box;
+    /* **关键：为单元格设置一个固定的高度** */
+    height: 65px; /* 尝试这个高度，可以根据实际效果调整 */
+    padding: 4px 3px; /* 单元格内边距 */
+    font-size: 0.9em; /* 单元格基础字号 */
 }
 
 .calendar-table th {
-    background-color: #f9f9f9;
+    background-color: #fcfcfc;
+    font-weight: 500;
+    padding-top: 8px; /* 表头顶部 padding 大一点 */
+    padding-bottom: 8px;
+    font-size: 0.95em; /* 表头字号略大 */
+    height: auto; /* 表头高度由内容和padding决定 */
 }
 
 .date-cell {
     cursor: pointer;
 }
-
 .date-cell:hover {
-    background-color: #e9f5ff;
+    background-color: #f5faff;
 }
 
 .solar-day {
-    font-size: 1.1em;
-    font-weight: bold;
+    font-size: 1.2em;  /* 公历日字号 */
+    font-weight: 500;
     display: block;
+    line-height: 1.3;
+    margin-bottom: 3px; /* 日与农历的间距 */
+    color: #333;
 }
 
 .lunar-day {
-    font-size: 0.75em;
-    color: #555;
+    font-size: 0.85em; /* 农历字号 */
+    color: #777;
     display: block;
-    margin-top: 2px;
-    overflow: hidden;
-    /* 防止节日文字过长 */
-    text-overflow: ellipsis;
-    /* 显示省略号 */
     white-space: nowrap;
-    /* 不换行 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    line-height: 1.2;
+    margin-bottom: 2px; /* 农历与节日的间距 */
 }
 
 .other-month-day .solar-day,
-.other-month-day .lunar-day {
-    color: #aaa;
+.other-month-day .lunar-day,
+.other-month-day .festival,
+.other-month-day .jieqi {
+    color: #c0c0c0 !important;
+    opacity: 0.9;
 }
 
 .today .solar-day {
-    color: #fff;
     background-color: #007bff;
+    color: #fff !important; /* 确保覆盖 .other-month-day 如果今天是其他月份的日期 */
     border-radius: 50%;
-    width: 2em;
-    /* 调整以适应字体 */
+    width: 2em; /* 圆圈大小，相对于 .solar-day 的 font-size */
     height: 2em;
-    /* 调整以适应字体 */
     line-height: 2em;
-    /* 调整以适应字体 */
-    margin: 0 auto 2px;
-    /* 居中 */
     display: inline-block;
-    /* 使其成为圆形背景 */
+    margin: 0 auto; /* 圆圈本身居中 */
 }
+/* 如果 .today 本身也想有背景，可以取消注释，但通常圆形高亮数字就够了 */
+/* .today { background-color: #fffacd; } */
 
-.today {
-    background-color: #fffbe6;
-    /* 稍微高亮今天的单元格 */
+
+.weekend { /* 表头周末文字颜色 */
+    color: #d9534f; /* 一个柔和的红色 */
 }
+/* 如果希望周末日期的数字也变色，需要JS给td添加'weekend-day'类 */
+/* .weekend-day .solar-day { color: #d9534f; } */
 
 
-.weekend {
-    /* 周六周日表头和日期 */
-    color: #e60000;
+.festival, .jieqi {
+    font-size: 0.8em; /* 节日节气字号 */
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 95%;
+    margin: 1px auto 0;
+    line-height: 1.2;
+    padding: 1px 3px; /* 给节日节气一点内边距 */
+    border-radius: 3px;
 }
-
 .festival {
-    font-size: 0.7em;
-    color: #c0392b;
-    /* 节日红色 */
-    display: block;
-    margin-top: 2px;
+    color: #d9534f;
+    /* background-color: #fdf1f1; */ /* 淡节日背景 */
 }
-
 .jieqi {
-    font-size: 0.7em;
-    color: #27ae60;
-    /* 节气绿色 */
-    display: block;
-    margin-top: 2px;
+    color: #5cb85c; /* 一个柔和的绿色 */
+    /* background-color: #f1fdf1; */ /* 淡节气背景 */
 }
 
 /* 信息面板 */
 .date-info-panel {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 4px;
+    padding: 12px 15px; /* 信息面板内边距 */
+    border-top: 1px solid #eaeaea;
     background-color: #f9f9f9;
+    font-size: 0.95em; /* 信息面板字号 */
+    line-height: 1.6; /* 信息面板行高，更易读 */
 }
-
 .date-info-panel h3 {
     margin-top: 0;
+    margin-bottom: 8px;
     color: #007bff;
+    font-size: 1.05em; /* 信息面板标题字号 */
+    font-weight: 600;
+}
+.date-info-panel p {
+    margin: 4px 0;
+    color: #444;
 }
 
-.date-info-panel p {
-    font-size: 0.9em;
-    margin: 5px 0;
-    color: #333;
+html, body {
+    height: auto; /* 让它们的高度由内容决定 */
+    overflow: visible; /* 先设置为 visible，看看实际效果，如果需要，再改为 auto 或 hidden */
 }
