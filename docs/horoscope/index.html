@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星座运势</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="horoscope-widget">
+        <div id="loading-state" class="loading">
+            <div class="spinner"></div>
+            <p>正在加载您的专属运势...</p>
+        </div>
+
+        <div id="error-state" class="error-message" style="display: none;">
+            <p id="error-text"></p>
+            <p class="instructions">请在URL中添加 `?birthday=MMDD` 参数，例如 `?birthday=0911`</p>
+        </div>
+
+        <div id="data-display" style="display: none;">
+            <header class="widget-header">
+                <h2 id="sign-title"></h2> <!-- 水瓶座 -->
+                <p id="current-time"></p> <!-- 5月27日 -->
+            </header>
+
+            <section class="short-comment-section">
+                <p id="short-comment"></p> <!-- 常规的节奏进行 -->
+            </section>
+
+            <section class="todo-section">
+                <div class="todo-item yi">
+                    <span class="todo-label">宜</span>
+                    <span id="todo-yi"></span>
+                </div>
+                <div class="todo-item ji">
+                    <span class="todo-label">忌</span>
+                    <span id="todo-ji"></span>
+                </div>
+            </section>
+
+            <section class="lucky-info-grid">
+                <div class="lucky-item">
+                    <span class="label">幸运色:</span>
+                    <span id="lucky-color" class="value"></span>
+                </div>
+                <div class="lucky-item">
+                    <span class="label">幸运数字:</span>
+                    <span id="lucky-number" class="value"></span>
+                </div>
+                <div class="lucky-item">
+                    <span class="label">速配星座:</span>
+                    <span id="lucky-constellation" class="value"></span>
+                </div>
+            </section>
+
+            <section class="ratings-grid">
+                <div class="rating-item">
+                    <span class="label">综合运势:</span>
+                    <span id="fortune-all" class="value"></span>
+                    <span id="index-all" class="index-value"></span>
+                </div>
+                <div class="rating-item">
+                    <span class="label">爱情运势:</span>
+                    <span id="fortune-love" class="value"></span>
+                    <span id="index-love" class="index-value"></span>
+                </div>
+                <div class="rating-item">
+                    <span class="label">事业学业:</span>
+                    <span id="fortune-work" class="value"></span>
+                    <span id="index-work" class="index-value"></span>
+                </div>
+                <div class="rating-item">
+                    <span class="label">财富运势:</span>
+                    <span id="fortune-money" class="value"></span>
+                    <span id="index-money" class="index-value"></span>
+                </div>
+                <div class="rating-item">
+                    <span class="label">健康运势:</span>
+                    <span id="fortune-health" class="value"></span>
+                    <span id="index-health" class="index-value"></span>
+                </div>
+            </section>
+
+            <section class="fortune-text-section">
+                <h3><span class="icon">📖</span>运势详解</h3>
+                <details>
+                    <summary>综合运势<span class="arrow"></span></summary>
+                    <p id="text-all"></p>
+                </details>
+                <details>
+                    <summary>爱情运势<span class="arrow"></span></summary>
+                    <p id="text-love"></p>
+                </details>
+                <details>
+                    <summary>事业学业<span class="arrow"></span></summary>
+                    <p id="text-work"></p>
+                </details>
+                <details>
+                    <summary>财富运势<span class="arrow"></span></summary>
+                    <p id="text-money"></p>
+                </details>
+                <details>
+                    <summary>健康运势<span class="arrow"></span></summary>
+                    <p id="text-health"></p>
+                </details>
+            </section>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
