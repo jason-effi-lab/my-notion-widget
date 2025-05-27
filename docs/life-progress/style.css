@@ -1,0 +1,142 @@
+/* 基本重置和页面设置 */
+html {
+    box-sizing: border-box;
+    /* 更直观的盒模型 */
+    font-size: 16px;
+    /* 设置根字体大小，方便 rem 单位计算 */
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background-color: #FFFFFF;
+    /* 小组件外部的背景，对于 Notion Embed 来说，这可能是透明的或由Notion控制 */
+    color: #333333;
+    /* 默认文字颜色 */
+    display: flex;
+    justify-content: center;
+    /* 水平居中（如果 body 直接作为容器）*/
+    align-items: flex-start;
+    /* 垂直对齐到顶部 */
+    padding: 1rem;
+    /* 在body周围留出一些空间，以便在独立打开时好看 */
+    min-height: 100vh;
+    /* 确保在内容较少时，背景也能撑开 */
+}
+
+/* 小组件主容器 */
+.progress-widget-container {
+    width: 100%;
+    /* 占据父容器（如 Notion Embed）的全部宽度 */
+    max-width: 500px;
+    /* 可以设置一个最大宽度，防止在过宽的容器中拉伸变形 */
+    min-width: 250px;
+    /* 确保在非常窄的容器中不会挤压得太厉害 */
+    padding: 1rem;
+    /* 内边距 */
+    background-color: #FFFFFF;
+    /* 小组件卡片的背景色 */
+    border-radius: 8px;
+    /* 轻微的圆角 */
+    /* 可以考虑添加一个非常细微的边框或阴影，如果需要在 Notion 中更突出显示 */
+    /* border: 1px solid #E0E0E0; */
+    /* box-shadow: 0 2px 8px rgba(0,0,0,0.05); */
+}
+
+.progress-item {
+    margin-bottom: 1rem;
+    /* 每个进度条项目之间的间距 */
+}
+
+.progress-item:last-child {
+    margin-bottom: 0;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    /* 基线对齐，使得不同大小的文字也能很好对齐 */
+    margin-bottom: 0.5rem;
+    /* 标签和进度条之间的间距 */
+    font-size: 0.875rem;
+    /* 约 14px, 如果根字体是16px */
+}
+
+.label-text {
+    color: #555555;
+    /* 标签文字颜色 (Year, Month etc.) */
+    font-weight: 500;
+    /* 中等粗细 */
+}
+
+.progress-percentage {
+    color: #2D2D2D;
+    /* 百分比文字颜色，与进度条填充色呼应 */
+    font-weight: 600;
+    /* 略粗一些 */
+    font-size: 0.9rem;
+    /* 可以让百分比稍微突出一点 */
+}
+
+/* 进度条轨道 */
+.progress-bar-track {
+    width: 100%;
+    height: 10px;
+    /* 进度条高度，可以根据喜好调整 */
+    background-color: #EAEAEA;
+    /* 浅灰色轨道背景 */
+    border-radius: 5px;
+    /* 使轨道也具有圆角 */
+    overflow: hidden;
+    /* 确保内部填充条的圆角不会溢出 */
+}
+
+/* 进度条填充 */
+.progress-bar-fill {
+    height: 100%;
+    background-color: #2D2D2D;
+    /* 高级感的黑色 */
+    border-radius: 5px;
+    /* 与轨道一致的圆角 */
+    width: 0%;
+    /* 初始宽度为0, 通过JS更新 */
+    transition: width 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    /* 更平滑自然的过渡动画 */
+}
+
+/* 针对非常小的屏幕或Notion Embed尺寸的调整 */
+@media (max-width: 320px) {
+    .progress-widget-container {
+        padding: 0.75rem;
+        min-width: unset;
+        /* 在极小宽度下取消最小宽度限制 */
+    }
+
+    .progress-label {
+        font-size: 0.8rem;
+        /* 略微减小字体 */
+    }
+
+    .progress-percentage {
+        font-size: 0.85rem;
+    }
+
+    .progress-bar-track {
+        height: 8px;
+        /* 略微减小进度条高度 */
+        border-radius: 4px;
+    }
+
+    .progress-bar-fill {
+        border-radius: 4px;
+    }
+}
