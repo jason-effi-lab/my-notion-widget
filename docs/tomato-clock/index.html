@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄钟小组件</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="pomodoro-widget-container">
+        <div class="timer-area">
+            <div class="status-display" id="status-display">准备开始</div>
+            <div class="timer-circle-container">
+                <svg class="timer-svg" viewBox="0 0 100 100">
+                    <circle class="progress-track" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress-fill" id="progress-fill" cx="50" cy="50" r="45"
+                        transform="rotate(-90 50 50)"></circle>
+                </svg>
+                <div class="time-display" id="time-display">25:00</div>
+            </div>
+            <div class="pomodoro-count-display" id="pomodoro-count-display">已完成番茄: 0</div>
+        </div>
+
+        <div class="controls">
+            <button id="play-pause-button" class="control-button" title="开始/暂停">
+                <svg id="play-icon" class="icon icon-play" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"></path>
+                </svg>
+                <svg id="pause-icon" class="icon icon-pause" viewBox="0 0 24 24" fill="currentColor"
+                    style="display: none;">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+                </svg>
+            </button>
+            <button id="stop-button" class="control-button" title="停止并重置当前">
+                <svg class="icon icon-stop" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 6h12v12H6z"></path>
+                </svg>
+            </button>
+            <button id="skip-button" class="control-button" title="跳过当前阶段">
+                <svg class="icon icon-skip" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                    <line x1="18" y1="5" x2="18" y2="19"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

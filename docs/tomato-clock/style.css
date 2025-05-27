@@ -1,0 +1,207 @@
+/* 基本重置和页面设置 */
+html {
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background-color: #FFFFFF;
+    /* 小组件外部背景 */
+    color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0.25rem;
+    /* Body padding a bit smaller if widget itself has some */
+}
+
+/* 小组件主容器 */
+.pomodoro-widget-container {
+    width: 100%;
+    max-width: 260px;
+    /* 可以适当再减小一点最大宽度，以配合紧凑感 */
+    min-width: 180px;
+    /* 最小宽度也相应调整 */
+    padding: 0.75rem;
+    /* 显著减少主容器的内边距 */
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    /* 圆角可以稍微小一点或保持 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    /* 计时区域和控制按钮的间距也减少 */
+}
+
+/* 状态显示 */
+.status-display {
+    font-size: 0.85rem;
+    /* 略微调整字体大小以适应紧凑布局 */
+    color: #555555;
+    margin-bottom: 0.35rem;
+    /* 减少间距 */
+    font-weight: 500;
+    min-height: 1.1em;
+}
+
+/* 圆形容器 */
+.timer-circle-container {
+    position: relative;
+    width: 100%;
+    max-width: 160px;
+    /* 控制圆形的最大尺寸, 也可以减小 */
+    aspect-ratio: 1 / 1;
+    margin-bottom: 0.35rem;
+    /* 减少间距 */
+}
+
+.timer-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.progress-track,
+.progress-fill {
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 5;
+    /* 修改点1: 显著减少线条粗细 (原为7) */
+}
+
+.progress-track {
+    stroke: #EAEAEA;
+}
+
+.progress-fill {
+    stroke: #2D2D2D;
+    stroke-dasharray: 282.74;
+    /* 2 * PI * 45 (如果SVG r=45). 这个需要根据实际SVG半径调整 */
+    /* 如果 .timer-circle-container max-width 调整, SVG viewbox 和 r 可能也需要调整 */
+    /* 假设SVG内部的半径 (r) 不变，如果viewBox本身缩放了，相对粗细会变化*/
+    /* 此处假设SVG的内部坐标r=45不变，改变stroke-width直接生效 */
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.3s linear;
+}
+
+/* 时间显示 (位于圆形中央) */
+.time-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(1.8rem, 9vw, 2.5rem);
+    /* 调整字体大小范围以适应更小的圆 */
+    color: #2D2D2D;
+    font-weight: bold;
+}
+
+/* 番茄钟计数显示 */
+.pomodoro-count-display {
+    font-size: 0.75rem;
+    /* 略微调整 */
+    color: #888888;
+    margin-top: 0.15rem;
+    /* 减少间距 */
+}
+
+/* 控制按钮区域 */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    /* 按钮之间的间隙也略微减小 */
+}
+
+.control-button {
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    /* 减少按钮的 padding，使其更紧凑 */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+    color: #2D2D2D;
+}
+
+.control-button:hover {
+    background-color: #F0F0F0;
+}
+
+.control-button:active {
+    background-color: #E0E0E0;
+}
+
+.icon {
+    width: clamp(18px, 5.5vw, 22px);
+    /* 响应式图标大小也略微减小 */
+    height: clamp(18px, 5.5vw, 22px);
+}
+
+.icon-skip {
+    stroke-width: 2.5;
+    /* 保持不变或按比例略微减小 */
+}
+
+
+/* 针对非常小屏幕或Notion Embed尺寸的细微调整 */
+@media (max-width: 220px) {
+
+    /* 断点调整以适应新的紧凑尺寸 */
+    .pomodoro-widget-container {
+        padding: 0.5rem;
+        /* 极小情况下的padding */
+        min-width: 160px;
+    }
+
+    .timer-circle-container {
+        max-width: 120px;
+        /* 极小情况下的圆形尺寸 */
+    }
+
+    .status-display {
+        font-size: 0.75rem;
+    }
+
+    .pomodoro-count-display {
+        font-size: 0.7rem;
+    }
+
+    .controls {
+        gap: 0.4rem;
+    }
+
+    .control-button {
+        padding: 0.4rem;
+    }
+
+    .progress-track,
+    .progress-fill {
+        stroke-width: 4;
+        /* 极小屏幕下可以更细 */
+    }
+}
