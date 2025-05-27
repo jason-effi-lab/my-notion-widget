@@ -81,7 +81,7 @@ body {
 
 .widget-header {
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     /* Reduced margin */
     padding-bottom: 10px;
     /* Reduced padding */
@@ -91,7 +91,7 @@ body {
 .widget-header h2 {
     margin: 0 0 3px 0;
     /* Reduced margin */
-    font-size: 1.7em;
+    font-size: 1.5em;
     /* Reduced font size */
     color: #007bff;
     font-weight: 600;
@@ -109,11 +109,11 @@ body {
     font-size: 1.0em;
     /* Reduced font size */
     color: #495057;
-    padding: 8px 12px;
+    padding: 2px 12px;
     /* Reduced padding */
     background-color: #e9f5ff;
     border-radius: 6px;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     /* Reduced margin */
     font-style: italic;
 }
@@ -121,7 +121,7 @@ body {
 .todo-section {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     /* Reduced margin */
     gap: 10px;
     /* Reduced gap */
@@ -180,7 +180,7 @@ body {
     /* Slightly smaller minmax */
     gap: 10px;
     /* Reduced gap */
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     /* Reduced margin */
 }
 
@@ -214,7 +214,7 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     /* Reduced gap */
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     /* Reduced margin */
 }
 
