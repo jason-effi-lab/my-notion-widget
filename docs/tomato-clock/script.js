@@ -144,7 +144,8 @@ function handleSessionEnd(skipped = false) {
 
     // Optionally play a sound
     if (playSound) {
-        // new Audio('path_to_your_notification_sound.mp3').play(); // Example
+        const sound = new Audio('notification.mp3'); // 替换 'notification.mp3' 为您的音频文件路径或URL
+        sound.play();
         console.log("Session ended, play sound!");
     }
 }
