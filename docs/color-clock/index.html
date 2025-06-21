@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纯JS彩色时钟</title>
+    <!-- 1. 引入 moment.js 库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
+
+    <!-- 2. 放入提供的 CSS -->
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        /* This snippet was generated  on Blue Topaz example */
+        /* https://github.com/cumany/Blue-topaz-examples */
+        .progress-clock {
+
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        position: relative;
+        text-align: center;
+        height: 15em;
+        width: 15em; /* Added for better container sizing */
+        }
+
+        .progress-clock button{
+        padding: 0;
+        }
+        .progress-clock button:hover {
+        background-color: transparent;
+        }
+        .progress-clock__time-date,
+        .progress-clock__time-digit,
+        .progress-clock__time-colon,
+        .progress-clock__time-ampm {
+        font: 1em/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        transition: color 0.2s linear;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        }
+        .progress-clock__time-date,
+        .progress-clock__time-digit {
+        background: transparent;
+        }
+        .progress-clock__time-date,
+        .progress-clock__time-ampm {
+        grid-column: 1 / 6;
+        }
+        .progress-clock__time-date {
+        font-size: 0.75em;
+        line-height: 1.33;
+        }
+        .progress-clock__time-digit,
+        .progress-clock__time-colon {
+        font-size: 1.6em;
+        font-weight: 400;
+        grid-row: 2;
+        margin: 0;
+        }
+        .progress-clock__time-colon {
+        line-height: calc(var(--font-text-size)*1.5);
+        }
+
+        .is-mobile .progress-clock__time-colon {
+        line-height: 2.5em;
+        font-size: 16px;
+        }
+
+        .progress-clock__time-ampm {
+        cursor: default;
+        grid-row: 3;
+        }
+        .progress-clock__rings {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.6;
+        }
+        .progress-clock__ring {
+        opacity: 0.1;
+        }
+        .progress-clock__ring-fill {
+        transition:
+          opacity 0s 0.3s linear,
+          stroke-dashoffset 0.3s ease-in-out;
+        }
+        .progress-clock__ring-fill--360 {
+        opacity: 0;
+        stroke-dashoffset: 0;
+        transition-duration: 0.3s;
+        }
+        [data-group]:focus {
+        outline: transparent;
+        }
+        [data-units] {
+        transition: opacity 0.2s linear;
+        }
+        [data-group="d"]:focus,
+        [data-group="d"]:hover {
+        color: hsl(333,90%,55%);
+        }
+        [data-group="h"]:focus,
+        [data-group="h"]:hover {
+        color: hsl(33,90%,55%);
+        }
+        [data-group="m"]:focus,
+        [data-group="m"]:hover {
+        color: hsl(213,90%,55%);
+        }
+        [data-group="s"]:focus,
+        [data-group="s"]:hover {
+        color: hsl(273,90%,55%);
+        }
+        [data-group]:focus ~ .progress-clock__rings [data-units],
+        [data-group]:hover ~ .progress-clock__rings [data-units] {
+        opacity: 0.2;
+        }
+        [data-group="d"]:focus ~ .progress-clock__rings [data-units="d"],
+        [data-group="d"]:hover ~ .progress-clock__rings [data-units="d"],
+        [data-group="h"]:focus ~ .progress-clock__rings [data-units="h"],
+        [data-group="h"]:hover ~ .progress-clock__rings [data-units="h"],
+        [data-group="m"]:focus ~ .progress-clock__rings [data-units="m"],
+        [data-group="m"]:hover ~ .progress-clock__rings [data-units="m"],
+        [data-group="s"]:focus ~ .progress-clock__rings [data-units="s"],
+        [data-group="s"]:hover ~ .progress-clock__rings [data-units="s"] {
+        opacity: 1;
+        }
+
+        #clock button:not(.clickable-icon)
+        {
+          border: none;
+          box-shadow: none;
+          background-color:transparent;
+          display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3. 放入 HTML 结构, 这是 React 组件渲染出的结果 -->
+    <div id="clock" class="progress-clock">
+        <button class="progress-clock__time-date" data-group="d" type="button">
+            <small data-unit="w">星期四</small><br>
+            <span data-unit="mo">六月</span>
+            <span data-unit="d">20</span>
+        </button>
+        <button class="progress-clock__time-digit" data-unit="h" data-group="h" type="button">12</button>
+        <span class="progress-clock__time-colon">:</span>
+        <button class="progress-clock__time-digit" data-unit="m" data-group="m" type="button">30</button>
+        <span class="progress-clock__time-colon">:</span>
+        <button class="progress-clock__time-digit" data-unit="s" data-group="s" type="button">55</button>
+        <span class="progress-clock__time-ampm" data-unit="ap">pm</span>
+        <svg class="progress-clock__rings" width="256" height="256" viewBox="0 0 256 256">
+            <defs>
+                <!-- Defs are not needed for this implementation but kept for structural similarity -->
+            </defs>
+            <g data-units="d">
+                <circle class="progress-clock__ring" cx="128" cy="128" r="74" fill="none" opacity="0.1" stroke="#e13e78" stroke-width="12"></circle>
+                <circle class="progress-clock__ring-fill" data-ring="mo" cx="128" cy="128" r="74" fill="none" stroke="#e13e78" stroke-width="12" stroke-dasharray="465 465" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90,128,128)"></circle>
+            </g>
+            <g data-units="h">
+                <circle class="progress-clock__ring" cx="128" cy="128" r="90" fill="none" opacity="0.1" stroke="#e79742" stroke-width="12"></circle>
+                <circle class="progress-clock__ring-fill" data-ring="d" cx="128" cy="128" r="90" fill="none" stroke="#e79742" stroke-width="12" stroke-dasharray="565.5 565.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90,128,128)"></circle>
+            </g>
+            <g data-units="m">
+                <circle class="progress-clock__ring" cx="128" cy="128" r="106" fill="none" opacity="0.1" stroke="#4483ec" stroke-width="12"></circle>
+                <circle class="progress-clock__ring-fill" data-ring="h" cx="128" cy="128" r="106" fill="none" stroke="#4483ec" stroke-width="12" stroke-dasharray="666 666" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90,128,128)"></circle>
+            </g>
+            <g data-units="s">
+                <circle class="progress-clock__ring" cx="128" cy="128" r="122" fill="none" opacity="0.1" stroke="#8f30eb" stroke-width="12"></circle>
+                <circle class="progress-clock__ring-fill" data-ring="m" cx="128" cy="128" r="122" fill="none" stroke="#8f30eb" stroke-width="12" stroke-dasharray="766.5 766.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90,128,128)"></circle>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 4. 我们的纯 JavaScript 逻辑 -->
+    <script>
+        // 等待 DOM 完全加载
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 获取所有需要更新的元素的引用 (只获取一次，提高效率)
+            const dateElements = {
+                week: document.querySelector('[data-unit="w"]'),
+                month: document.querySelector('[data-unit="mo"]'),
+                day: document.querySelector('[data-unit="d"]'),
+            };
+            const timeElements = {
+                hour: document.querySelector('[data-unit="h"]'),
+                minute: document.querySelector('[data-unit="m"]'),
+                second: document.querySelector('[data-unit="s"]'),
+                ampm: document.querySelector('[data-unit="ap"]'),
+            };
+            const ringFills = {
+                day: document.querySelector('[data-ring="mo"]'),
+                hour: document.querySelector('[data-ring="d"]'),
+                minute: document.querySelector('[data-ring="h"]'),
+                second: document.querySelector('[data-ring="m"]'),
+            };
+
+            // 主更新函数
+            function updateClock() {
+                // 设置 moment.js 的语言为中文
+                moment.locale('zh-cn');
+
+                const now = moment();
+                // 格式化时间并分割成数组，与 React 版本逻辑一致
+                const formatDate = now.format("dddd-MMMM-D-H-mm-ss-a").split("-");
+
+                // 分别是：周, 月, 日, 时, 分, 秒, am/pm
+                const [week, month, day, hour, minute, second, ampm] = formatDate;
+
+                // --- 更新文本内容 ---
+                dateElements.week.textContent = week;
+                dateElements.month.textContent = month;
+                dateElements.day.textContent = day;
+                
+                timeElements.hour.textContent = hour;
+                timeElements.minute.textContent = minute;
+                timeElements.second.textContent = second;
+                timeElements.ampm.textContent = ampm;
+
+                // --- 计算进度并更新 SVG 圆环 ---
+                // 获取当月总天数，比写死31天更精确
+                const daysInMonth = now.daysInMonth(); 
+
+                const secProgress = second / 60;
+                const minProgress = (parseInt(minute) + secProgress) / 60; // 优化：分钟进度更平滑
+                const hourProgress = (parseInt(hour) + minProgress) / 24;
+                const dayProgress = (parseInt(day) - 1 + hourProgress) / daysInMonth; // 优化：天数从0开始计算
+
+                // 圆环周长，与 React 代码中的值保持一致
+                const circumferences = { day: 465, hour: 565.5, minute: 666, second: 766.5 };
+
+                // 更新 stroke-dashoffset 属性
+                // (1 - progress) * circumference 是计算剩余部分长度的公式
+                ringFills.second.setAttribute('stroke-dashoffset', (1 - secProgress) * circumferences.second);
+                ringFills.minute.setAttribute('stroke-dashoffset', (1 - minProgress) * circumferences.minute);
+                ringFills.hour.setAttribute('stroke-dashoffset', (1 - hourProgress) * circumferences.hour);
+                ringFills.day.setAttribute('stroke-dashoffset', (1 - dayProgress) * circumferences.day);
+            }
+
+            // 首次加载时立即执行一次，避免页面打开时有1秒延迟
+            updateClock();
+
+            // 设置定时器，每秒更新一次
+            setInterval(updateClock, 1000);
+        });
+    </script>
+</body>
+</html>
